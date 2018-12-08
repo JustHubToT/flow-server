@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flow.dao.SysAreaMapper">
+  <resultMap id="BaseResultMap" type="com.flow.model.SysArea">
+    <id column="area_code" jdbcType="VARCHAR" property="areaCode" />
+    <result column="area_name" jdbcType="VARCHAR" property="areaName" />
+    <result column="parent_code" jdbcType="VARCHAR" property="parentCode" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    area_code, area_name, parent_code
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_sys_area
+    where area_code = #{areaCode,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByParentCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_sys_area
+    where parent_code = #{parentCode,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_sys_area
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_sys_area
+    where area_code = #{areaCode,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insertSelective" parameterType="com.flow.model.SysArea">
+    insert into t_sys_area
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="areaCode != null">
+        area_code,
+      </if>
+      <if test="areaName != null">
+        area_name,
+      </if>
+      <if test="parentCode != null">
+        parent_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="areaCode != null">
+        #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="areaName != null">
+        #{areaName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentCode != null">
+        #{parentCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <insert id="insertBatch">
+    insert into t_sys_area (area_code, area_name, parent_code)
+    values
+    <foreach collection="lists" item="com.flow.model.SysArea" separator=",">
+      (#{com.flow.model.SysArea.areaCode}, #{com.flow.model.SysArea.areaName}, #{com.flow.model.SysArea.parentCode})
+    </foreach>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.flow.model.SysArea">
+    update t_sys_area
+    <set>
+      <if test="areaName != null">
+        area_name = #{areaName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentCode != null">
+        parent_code = #{parentCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where area_code = #{areaCode,jdbcType=VARCHAR}
+  </update>
+</mapper>
